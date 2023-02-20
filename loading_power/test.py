@@ -87,8 +87,14 @@ class Net(nn.Module):
     def __init__(self, input_channel=100, output_channel=10, kernel_size=3, stride=1):
         super().__init__()
         self.conv1 = nn.Conv2d(input_channel, output_channel, kernel_size, stride)
-        output = int((((image_size - kernel_size)/stride)+1))**2 * output_channel
-        self.fc1 = nn.Linear(output, 10)
+        
+        self.output_size = int(
+                    pow(((image_size - kernel_size )/stride) + 1, 2)
+                    *output_channel
+                )
+        
+
+        self.fc1 = nn.Linear(self.output_size, 10)
 
 
     def forward(self, x):
@@ -112,10 +118,10 @@ criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 
 
-output = int((((image_size - kernel_size)/stride)+1))**2 * output_channel
+output = model.output_size
 
 # t = torch.cuda.get_device_properties(0).total_memory
-# rsv = torch.cuda.memory_reserved(0)
+reserved0 = torch.cuda.memory_reserved(0)
 # aloc = torch.cuda.memory_allocated(0)
 
 
@@ -168,6 +174,7 @@ for e in range(EPOCH):
             y = y.to(device)
             rt.stop()
             delay1 = time.time() - now1
+            reserved1 = torch.cuda.memory_reserved(0)
             mutex.acquire()
             if count>0:
             	avgpower1 = int(board_power/count)
@@ -224,9 +231,7 @@ for e in range(EPOCH):
         #     reset()
         #     mutex.release()
         #     print("Exception occured")
-    with open(f"main_rsv_{rsv}_aloc_{aloc}_ic_{input_channel}_oc_{output_channel}_ks_{kernel_size}_strd_{stride}_imgsize_{image_size}_epoch_{e}_batch_{batch_size}.txt", "w") as f:
+    with open(f"rsv0_{reserved0}_rsv1_{reserved1}_ic_{input_channel}_oc_{output_channel}_ks_{kernel_size}_strd_{stride}_imgsize_{image_size}_epoch_{e}_batch_{batch_size}.txt", "w") as f:
         writer = csv.writer(f, delimiter='\t')
         writer.writerows(zip(avgp1,time1,energy1,count1))
-    with open(f"minmax_rsv_{rsv}_aloc_{aloc}_ic_{input_channel}_oc_{output_channel}_ks_{kernel_size}_strd_{stride}_imgsize_{image_size}_epoch_{e}_batch_{batch_size}.txt", "w") as f:
-        f.write("%f %f\n" %(int(minp1),int(maxp1)))      
 
