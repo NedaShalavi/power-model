@@ -1090,4 +1090,4 @@ sleep 2
 python3 test.py 64 256 128 28 3 1
 sleep 2
 python3 test.py 64 256 256 28 3 1
-sleep 2
+shutdown now
