@@ -132,7 +132,7 @@ for e in range(EPOCH):
     minp2 = 1000000
     avgpower2 = avgpower1 = 0
 
-    for i in range(100):
+    for i in range(30):
         x = np.random.random(size=(batch_size,ginput_size))
         y = np.zeros((batch_size, goutput_size))
         a = np.random.randint(0,goutput_size, size=(batch_size))
