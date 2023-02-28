@@ -203,7 +203,7 @@ for e in range(EPOCH):
             reset()
             mutex.release()
             print("Exception occured")
-    with open(f"num_{num}_input_{ginput_size}_output_{goutput_size}_epoch_{e+1}.txt", "w") as f:
+    with open(f"input_{ginput_size}_output_{goutput_size}_epoch_{e+1}_batch_{batch_size}.txt", "w") as f:
         writer = csv.writer(f, delimiter='\t')
         writer.writerows(zip(avgp1,time1,energy1,count1,avgp2,time2,energy2,count2))
 
