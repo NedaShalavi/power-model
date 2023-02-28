@@ -18,8 +18,8 @@ import torch.optim as optim
 ginput_size = int(sys.argv[1])
 goutput_size = int(sys.argv[2])
 batch_size = int(sys.argv[3])
-EPOCH = 10 #int(sys.argv[5])
-iterations = 100 #int(sys.argv[6])
+EPOCH = 4 #int(sys.argv[5])
+iterations = 30 #int(sys.argv[6])
 
 
 mutex = th.Lock()
